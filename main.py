@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
 import pymongo
 from datetime import datetime, timedelta
 from pydantic import BaseModel
@@ -29,6 +31,19 @@ def select_col(db, colName):
 
 # Main function
 app = FastAPI()
+
+# Set up CORS
+origins = [
+    "*"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # FastAPI methods
 @app.get("/data/{component}/{parameter}")

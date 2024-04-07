@@ -112,7 +112,7 @@ async def data_insert(vUR: ValueUpdateRecord):
     if (vUR.component == "drivecontroller" and vUR.parameter == "statemachine_state"):
         # Validate that the state is valid (0...3)
         if (vUR.newValue < 0 or vUR.newValue > 3):
-            return
+            return { "state": "ERROR" }
 
         # Connect to mongoDB and change the value accordingly
         databaseClient = connect_to_mongodb()
@@ -124,4 +124,6 @@ async def data_insert(vUR: ValueUpdateRecord):
         newState = {"displayName": "Statemachine state","category": "Drivecontroller","value": vUR.newValue,"unit": "","timestamp": parameterTimestamp}
 
         statemachineCol.insert_one(newState)
+
+        return { "state": "SUCCESS" }
 
